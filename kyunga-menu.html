@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>경아식당 (난곡점) 메뉴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f2e8d3;
+    --paper-card:#fbf6ea;
+    --red:#ac3327;
+    --red-deep:#7e241b;
+    --ink:#241d16;
+    --ink-soft:#5c5044;
+    --gold:#b8893c;
+    --line: rgba(172,51,39,0.28);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 10% 0%, rgba(172,51,39,0.05), transparent 45%),
+      radial-gradient(circle at 90% 100%, rgba(184,137,60,0.08), transparent 40%),
+      var(--paper);
+    font-family:'Noto Sans KR', sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .paper-texture{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.5;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px);
+  }
+  .wrap{max-width:640px; margin:0 auto; padding:0 0 60px; position:relative; z-index:1;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:38px 24px 26px;
+    text-align:center;
+    position:relative;
+  }
+  .stamp{
+    width:74px; height:74px; margin:0 auto 14px;
+    border:2.5px solid var(--red);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--red);
+    font-family:'Noto Serif KR', serif;
+    font-weight:900;
+    font-size:22px;
+    letter-spacing:-1px;
+    transform:rotate(-8deg);
+    opacity:0;
+    animation: stampIn 0.7s cubic-bezier(.2,.9,.3,1.3) 0.15s forwards;
+    box-shadow: 0 0 0 1px rgba(172,51,39,0.15) inset;
+  }
+  @keyframes stampIn{
+    0%{opacity:0; transform:rotate(-8deg) scale(2.4);}
+    60%{opacity:1;}
+    100%{opacity:0.92; transform:rotate(-8deg) scale(1);}
+  }
+  .hero h1{
+    font-family:'Noto Serif KR', serif;
+    font-weight:900;
+    font-size:34px;
+    margin:0 0 4px;
+    letter-spacing:1px;
+  }
+  .hero .sub{
+    font-size:13px;
+    color:var(--ink-soft);
+    letter-spacing:2px;
+  }
+  .hero .loc{
+    margin-top:10px;
+    font-size:12px;
+    color:var(--gold);
+    letter-spacing:1px;
+  }
+
+  /* ---------- Language tabs ---------- */
+  .langbar{
+    position:sticky; top:0; z-index:10;
+    background:rgba(242,232,211,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+    padding:10px 16px;
+    display:flex; justify-content:center; gap:6px;
+  }
+  .langtab{
+    font-family:'Noto Serif KR', serif;
+    font-weight:600;
+    font-size:14px;
+    padding:8px 16px;
+    background:none;
+    border:1px solid transparent;
+    border-radius:3px;
+    color:var(--ink-soft);
+    cursor:pointer;
+    position:relative;
+    transition:color .2s;
+  }
+  .langtab.active{ color:var(--red); }
+  .langtab.active::after{
+    content:"";
+    position:absolute; left:14px; right:14px; bottom:2px; height:2px;
+    background:var(--red);
+    border-radius:2px;
+  }
+
+  /* ---------- Sections ---------- */
+  .section{ padding:30px 20px 6px; opacity:0; transform:translateY(8px); animation:rise .5s ease forwards; }
+  .section:nth-of-type(1){animation-delay:.02s}
+  .section:nth-of-type(2){animation-delay:.06s}
+  .section:nth-of-type(3){animation-delay:.10s}
+  .section:nth-of-type(4){animation-delay:.14s}
+  .section:nth-of-type(5){animation-delay:.18s}
+  .section:nth-of-type(6){animation-delay:.22s}
+  @keyframes rise{to{opacity:1; transform:none;}}
+
+  .section-title{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Noto Serif KR', serif;
+    font-weight:700;
+    font-size:19px;
+    color:var(--red-deep);
+    margin-bottom:14px;
+  }
+  .section-title::before, .section-title::after{
+    content:""; flex:1; height:1px; background:var(--line);
+  }
+
+  .card{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:4px 16px;
+    margin-bottom:16px;
+  }
+  .item{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:12px;
+    padding:13px 0;
+    border-bottom:1px dashed rgba(36,29,22,0.12);
+  }
+  .item:last-child{border-bottom:none;}
+  .item-name{
+    font-weight:600;
+    font-size:15.5px;
+    line-height:1.35;
+  }
+  .item-suffix{
+    color:var(--ink-soft);
+    font-weight:400;
+    font-size:0.82em;
+    margin-left:5px;
+  }
+  .item-note{
+    white-space:pre-line;
+    display:block;
+    font-size:12px;
+    color:var(--ink-soft);
+    font-weight:400;
+    margin-top:3px;
+    line-height:1.4;
+  }
+  .item-price{
+    font-variant-numeric:tabular-nums;
+    font-weight:700;
+    font-size:15px;
+    color:var(--red);
+    white-space:nowrap;
+    padding-top:1px;
+  }
+  .item-price .was{
+    display:block;
+    text-align:right;
+    font-size:11px;
+    font-weight:500;
+    color:var(--ink-soft);
+    text-decoration:line-through;
+    margin-bottom:1px;
+  }
+
+  .banner{
+    margin:26px 16px 0;
+    background:var(--red);
+    color:#fbf1e4;
+    border-radius:10px;
+    padding:16px 18px;
+    font-size:12.5px;
+    line-height:1.7;
+    text-align:center;
+  }
+  .footnote{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:12.5px;
+    margin:18px 20px 0;
+    line-height:1.8;
+  }
+  .footer-mark{
+    text-align:center;
+    margin-top:34px;
+    font-family:'Noto Serif KR', serif;
+    font-size:12px;
+    color:var(--gold);
+    letter-spacing:3px;
+  }
+</style>
+</head>
+<body>
+<div class="paper-texture"></div>
+<div class="wrap">
+
+  <div class="hero">
+    <h1 id="restName">경아식당</h1>
+    <div class="sub" id="restSub">난곡점</div>
+    <div class="loc" id="restTagline">100% 국내산 한돈 · 묵은지 전문</div>
+  </div>
+
+  <div class="langbar" id="langbar"></div>
+
+  <div id="menuRoot"></div>
+
+</div>
+
+<script>
+const LANGS = [
+  {code:'ko', label:'한글'},
+  {code:'en', label:'EN'},
+  {code:'zh', label:'中文'},
+  {code:'ja', label:'日本語'}
+];
+
+const UI = {
+  ko:{name:'경아식당', sub:'난곡점', tag:'100% 국내산 한돈 · 묵은지 전문'},
+  en:{name:'Kyunga Restaurant', sub:'Nangok Branch', tag:'100% Korean Pork · Aged Kimchi Specialty'},
+  zh:{name:'京雅食堂', sub:'蓝谷店', tag:'100%韩国国产猪肉 · 陈年泡菜专门店'},
+  ja:{name:'キョンア食堂', sub:'ナンゴク店', tag:'韓国産豚肉100% ・ ムグンジ専門店'}
+};
+
+const DATA = [
+  {
+    title:{ko:'고기메뉴', en:'Meat', zh:'肉类菜单', ja:'肉メニュー'},
+    items:[
+      {
+        name:{ko:'경아 스페셜', en:'Kyunga Special', zh:'京雅特餐', ja:'キョンアスペシャル'},
+        note:{
+          ko:'고기 3인분(선택)+찌개 1종+묵사발+미나리+고사리\n찌개는 부대찌개·돼지짜글이·김치찌개 중 택1',
+          en:'3 servings of meat (your choice) + 1 stew + mookbowl + water celery + bracken fern\nChoose stew: budae-jjigae, pork jjiglagi, or kimchi-jjigae',
+          zh:'肉类3人份(可选)+锅类1种+荞麦凉粉+水芹+蕨菜\n锅类可选：部队火锅/猪肉炖锅/泡菜锅 三选一',
+          ja:'肉3人前(選択)+チゲ1種+ムッサバル+ミナリ+ワラビ\nチゲはプデチゲ・豚肉チャルジャギ・キムチチゲから選択'
+        },
+        was:'67,000원', price:'57,000원',
+        wasT:{en:'67,000 KRW', zh:'67,000韩元', ja:'67,000ウォン'},
+        priceT:{en:'57,000 KRW', zh:'57,000韩元', ja:'57,000ウォン'}
+      },
+      {
+        name:{ko:'경아 묵은지 한판', en:'Kyunga Aged Kimchi Set', zh:'京雅陈年泡菜套餐', ja:'キョンア ムグンジセット'},
+        note:{
+          ko:'고기 3인분(선택)+된장찌개+고사리+미나리',
+          en:'3 servings of meat (your choice) + soybean paste stew + bracken fern + water celery',
+          zh:'肉类3人份(可选)+大酱汤+蕨菜+水芹',
+          ja:'肉3人前(選択)+テンジャンチゲ+ワラビ+ミナリ'
+        },
+        was:'52,000원', price:'44,000원',
+        wasT:{en:'52,000 KRW', zh:'52,000韩元', ja:'52,000ウォン'},
+        priceT:{en:'44,000 KRW', zh:'44,000韩元', ja:'44,000ウォン'}
+      },
+      {
+        name:{ko:'묵은지 생대패 삼겹살 (150g)', en:'Aged Kimchi Sliced Pork Belly (150g)', zh:'陈年泡菜生片五花肉 (150g)', ja:'ムグンジ生タタキサムギョプサル (150g)'},
+        price:'14,000원', priceT:{en:'14,000 KRW', zh:'14,000韩元', ja:'14,000ウォン'}
+      },
+      {
+        name:{ko:'묵은지 삼겹살 (150g)', en:'Aged Kimchi Pork Belly (150g)', zh:'陈年泡菜五花肉 (150g)', ja:'ムグンジサムギョプサル (150g)'},
+        note:{
+          ko:'4℃에서 90일 숙성한 강원도 고랭지 묵은지',
+          en:'Made with aged kimchi from Gangwon-do highland cabbage, fermented 90 days at 4℃',
+          zh:'使用江原道高冷地泡菜，于4℃熟成90天',
+          ja:'江原道高冷地キムチを4℃で90日間熟成'
+        },
+        price:'14,000원', priceT:{en:'14,000 KRW', zh:'14,000韩元', ja:'14,000ウォン'}
+      },
+      {
+        name:{ko:'미박 목살 (1cm/120g)', en:'Skin-on Pork Collar (1cm/120g)', zh:'带皮猪颈肉 (1cm/120g)', ja:'皮付き豚トロ (1cm/120g)'},
+        price:'14,000원', priceT:{en:'14,000 KRW', zh:'14,000韩元', ja:'14,000ウォン'}
+      }
+    ],
+    banner:{
+      ko:'저희는 100% 국내산 한돈만 사용합니다.',
+      en:'We use only 100% Korean pork.',
+      zh:'本店只使用100%韩国国产猪肉。',
+      ja:'当店は100%韓国産豚肉のみを使用しています。'
+    }
+  },
+  {
+    title:{ko:'식사메뉴', en:'Meals', zh:'餐食菜单', ja:'食事メニュー'},
+    items:[
+      {name:{ko:'햄폭탄부대찌개', en:'Ham Bomb Budae-jjigae', zh:'火腿爆弹部队火锅', ja:'ハム爆弾プデチゲ'}, price:'13,000원', priceT:{en:'13,000 KRW', zh:'13,000韩元', ja:'13,000ウォン'}},
+      {name:{ko:'경아 부대찌개', en:'Kyunga Budae-jjigae', zh:'京雅部队火锅', ja:'キョンアプデチゲ'}, price:'11,000원', priceT:{en:'11,000 KRW', zh:'11,000韩元', ja:'11,000ウォン'}},
+      {name:{ko:'애호박 돼지짜글이', en:'Zucchini Pork Jjiglagi', zh:'西葫芦猪肉炖锅', ja:'ズッキーニ豚肉チャルジャギ'}, price:'12,000원', priceT:{en:'12,000 KRW', zh:'12,000韩元', ja:'12,000ウォン'}},
+      {name:{ko:'묵은지 김치찌개', en:'Aged Kimchi Jjigae', zh:'陈年泡菜汤', ja:'ムグンジキムチチゲ'}, price:'12,000원', priceT:{en:'12,000 KRW', zh:'12,000韩元', ja:'12,000ウォン'}},
+      {
+        name:{ko:'부대볶음', en:'Stir-fried Budae', zh:'部队炒菜', ja:'プデポックム'},
+        suffix:{
+          ko:'(2인분 이상 주문가능)',
+          en:'(Min. 2 servings)',
+          zh:'(需2人份以上)',
+          ja:'(2人前以上から注文可能)'
+        },
+        price:'13,000원', priceT:{en:'13,000 KRW', zh:'13,000韩元', ja:'13,000ウォン'}
+      },
+      {
+        name:{ko:'돼지두루치기', en:'Pork Duruchigi (Stir-fry)', zh:'猪肉杜鲁奇（辣炒猪肉）', ja:'豚肉トゥルチギ'},
+        suffix:{
+          ko:'(2인분 이상 주문가능)',
+          en:'(Min. 2 servings)',
+          zh:'(需2人份以上)',
+          ja:'(2人前以上から注文可能)'
+        },
+        price:'13,000원', priceT:{en:'13,000 KRW', zh:'13,000韩元', ja:'13,000ウォン'}
+      }
+    ]
+  },
+  {
+    title:{ko:'별미메뉴', en:'Specialties', zh:'特色菜单', ja:'一品料理'},
+    items:[
+      {
+        name:{ko:'미나리 새우전', en:'Water Celery & Shrimp Pancake', zh:'水芹虾煎饼', ja:'ミナリエビジョン'},
+        note:{ko:'일일 2개 한정', en:'Limited to 2 orders per day', zh:'每日限量2份', ja:'一日2食限定'},
+        price:'8,000원', priceT:{en:'8,000 KRW', zh:'8,000韩元', ja:'8,000ウォン'}
+      },
+      {name:{ko:'묵사발', en:'Mung Bean Jelly Bowl', zh:'荞麦凉粉汤', ja:'ムッサバル'}, price:'6,000원', priceT:{en:'6,000 KRW', zh:'6,000韩元', ja:'6,000ウォン'}},
+      {name:{ko:'김치말이 물국수', en:'Kimchi Cold Noodle Soup', zh:'泡菜冷面汤', ja:'キムチ水冷麺'}, price:'5,000원', priceT:{en:'5,000 KRW', zh:'5,000韩元', ja:'5,000ウォン'}},
+      {name:{ko:'김치말이 비빔국수', en:'Kimchi Spicy Mixed Noodles', zh:'泡菜拌面', ja:'キムチビビン麺'}, price:'5,000원', priceT:{en:'5,000 KRW', zh:'5,000韩元', ja:'5,000ウォン'}},
+      {name:{ko:'계란찜', en:'Steamed Egg', zh:'鸡蛋羹', ja:'茶碗蒸し'}, price:'5,000원', priceT:{en:'5,000 KRW', zh:'5,000韩元', ja:'5,000ウォン'}},
+      {name:{ko:'된장찌개', en:'Soybean Paste Stew', zh:'大酱汤', ja:'テンジャンチゲ'}, price:'4,000원', priceT:{en:'4,000 KRW', zh:'4,000韩元', ja:'4,000ウォン'}},
+      {name:{ko:'야끼만두무침 (5개)', en:'Seasoned Fried Dumplings (5pcs)', zh:'凉拌煎饺 (5个)', ja:'焼き餃子和え (5個)'}, price:'4,000원', priceT:{en:'4,000 KRW', zh:'4,000韩元', ja:'4,000ウォン'}},
+      {name:{ko:'치즈계란후라이 (2개)', en:'Cheese Fried Egg (2pcs)', zh:'芝士煎蛋 (2个)', ja:'チーズ目玉焼き (2個)'}, price:'2,000원', priceT:{en:'2,000 KRW', zh:'2,000韩元', ja:'2,000ウォン'}}
+    ]
+  },
+  {
+    title:{ko:'구이추가', en:'Grill Add-ons', zh:'烤盘加点', ja:'焼き追加'},
+    items:[
+      {name:{ko:'철판부대볶음', en:'Griddle Budae Stir-fry', zh:'铁板部队炒菜', ja:'鉄板プデポックム'}, price:'7,000원', priceT:{en:'7,000 KRW', zh:'7,000韩元', ja:'7,000ウォン'}},
+      {name:{ko:'철판볶음라면', en:'Griddle Stir-fried Ramyeon', zh:'铁板炒拉面', ja:'鉄板焼きラーメン'}, price:'6,000원', priceT:{en:'6,000 KRW', zh:'6,000韩元', ja:'6,000ウォン'}},
+      {name:{ko:'구워먹는 치즈 (6개)', en:'Grilled Cheese Cubes (6pcs)', zh:'烤芝士块 (6块)', ja:'焼きチーズ (6個)'}, price:'5,000원', priceT:{en:'5,000 KRW', zh:'5,000韩元', ja:'5,000ウォン'}},
+      {name:{ko:'구이햄', en:'Grilled Ham', zh:'烤火腿', ja:'焼きハム'}, price:'4,000원', priceT:{en:'4,000 KRW', zh:'4,000韩元', ja:'4,000ウォン'}},
+      {name:{ko:'볶음밥', en:'Fried Rice', zh:'炒饭', ja:'チャーハン'}, price:'3,000원', priceT:{en:'3,000 KRW', zh:'3,000韩元', ja:'3,000ウォン'}},
+      {name:{ko:'모듬버섯 (새송이 0.5개 + 팽이버섯 0.5개)', en:'Mixed Mushrooms (½ king oyster + ½ enoki)', zh:'什锦蘑菇 (杏鲍菇0.5个+金针菇0.5个)', ja:'盛り合わせきのこ (エリンギ0.5個+えのき0.5個)'}, price:'3,000원', priceT:{en:'3,000 KRW', zh:'3,000韩元', ja:'3,000ウォン'}},
+      {name:{ko:'미나리', en:'Water Celery', zh:'水芹', ja:'ミナリ'}, price:'3,000원', priceT:{en:'3,000 KRW', zh:'3,000韩元', ja:'3,000ウォン'}},
+      {name:{ko:'고사리', en:'Bracken Fern', zh:'蕨菜', ja:'ワラビ'}, price:'3,000원', priceT:{en:'3,000 KRW', zh:'3,000韩元', ja:'3,000ウォン'}}
+    ]
+  },
+  {
+    title:{ko:'찌개사리', en:'Stew Add-ons', zh:'火锅加料', ja:'チゲ追加'},
+    items:[
+      {name:{ko:'햄사리 (부대찌개, 부대볶음)', en:'Extra Ham (for Budae-jjigae / Stir-fry)', zh:'加火腿 (适用于部队火锅/炒菜)', ja:'ハム追加 (プデチゲ・プデポックム用)'}, price:'4,000원', priceT:{en:'4,000 KRW', zh:'4,000韩元', ja:'4,000ウォン'}},
+      {name:{ko:'두부사리', en:'Extra Tofu', zh:'加豆腐', ja:'豆腐追加'}, price:'2,000원', priceT:{en:'2,000 KRW', zh:'2,000韩元', ja:'2,000ウォン'}},
+      {name:{ko:'슬라이스치즈추가', en:'Extra Sliced Cheese', zh:'加芝士片', ja:'スライスチーズ追加'}, price:'1,000원', priceT:{en:'1,000 KRW', zh:'1,000韩元', ja:'1,000ウォン'}},
+      {name:{ko:'라면사리', en:'Extra Ramyeon Noodles', zh:'加拉面', ja:'ラーメン追加'}, price:'1,000원', priceT:{en:'1,000 KRW', zh:'1,000韩元', ja:'1,000ウォン'}},
+      {name:{ko:'떡사리', en:'Extra Rice Cake', zh:'加年糕', ja:'トック追加'}, price:'1,000원', priceT:{en:'1,000 KRW', zh:'1,000韩元', ja:'1,000ウォン'}},
+      {name:{ko:'공기밥', en:'Steamed Rice', zh:'米饭', ja:'ご飯'}, price:'1,000원', priceT:{en:'1,000 KRW', zh:'1,000韩元', ja:'1,000ウォン'}}
+    ]
+  },
+  {
+    title:{ko:'주류', en:'Drinks', zh:'酒水', ja:'お酒'},
+    items:[
+      {name:{ko:'일품진로1924 / 화요25', en:'Ilpum Jinro 1924 / Hwayo 25', zh:'一品真露1924 / 花瑶25', ja:'イルプムジンロ1924 / ファヨ25'}, price:'25,000원', priceT:{en:'25,000 KRW', zh:'25,000韩元', ja:'25,000ウォン'}},
+      {name:{ko:'산토리 하이볼', en:'Suntory Highball', zh:'三得利高球', ja:'サントリーハイボール'}, price:'8,000원', priceT:{en:'8,000 KRW', zh:'8,000韩元', ja:'8,000ウォン'}},
+      {name:{ko:'소주 (참이슬, 처음처럼, 진로, 새로)', en:'Soju (Chamisul, Cheoeumcheoreom, Jinro, Saero)', zh:'烧酒 (真露、初饮初乐、真露原味、Saero)', ja:'焼酎 (チャミスル・チョウムチョロム・ジンロ・セロ)'}, price:'5,000원', priceT:{en:'5,000 KRW', zh:'5,000韩元', ja:'5,000ウォン'}},
+      {name:{ko:'맥주 (카스, 테라)', en:'Beer (Cass, Terra)', zh:'啤酒 (Cass, Terra)', ja:'ビール (カス・テラ)'}, price:'5,000원', priceT:{en:'5,000 KRW', zh:'5,000韩元', ja:'5,000ウォン'}},
+      {name:{ko:'청하', en:'Chungha (Rice Wine)', zh:'清河米酒', ja:'チョンハ'}, price:'6,000원', priceT:{en:'6,000 KRW', zh:'6,000韩元', ja:'6,000ウォン'}},
+      {name:{ko:'막걸리', en:'Makgeolli (Rice Wine)', zh:'马格利酒', ja:'マッコリ'}, price:'5,000원', priceT:{en:'5,000 KRW', zh:'5,000韩元', ja:'5,000ウォン'}},
+      {name:{ko:'음료', en:'Soft Drink', zh:'饮料', ja:'ソフトドリンク'}, price:'3,000원', priceT:{en:'3,000 KRW', zh:'3,000韩元', ja:'3,000ウォン'}},
+      {name:{ko:'토닉워터', en:'Tonic Water', zh:'汤力水', ja:'トニックウォーター'}, price:'2,500원', priceT:{en:'2,500 KRW', zh:'2,500韩元', ja:'2,500ウォン'}},
+      {name:{ko:'슬라이스 레몬 (8피스)', en:'Sliced Lemon (8pcs)', zh:'柠檬片 (8片)', ja:'スライスレモン (8個)'}, price:'2,000원', priceT:{en:'2,000 KRW', zh:'2,000韩元', ja:'2,000ウォン'}}
+    ]
+  }
+];
+
+const NOTICE = {
+  ko:'※고기류 주문 시, 찌개 1인 주문가능※',
+  en:'※ With a meat order, a single stew can be ordered ※',
+  zh:'※点肉类菜品时，可单点1人份火锅 ※',
+  ja:'※お肉のご注文でチゲ1人前の追加が可能です ※'
+};
+
+const FOOT = {
+  ko:'1인 1주문 부탁드립니다 · 평일 점심 공기밥 무한리필',
+  en:'One order per person, please · Free rice refills on weekday lunches',
+  zh:'每人至少点一份餐 · 平日午餐米饭免费续加',
+  ja:'お一人様1品ご注文をお願いします · 平日ランチはご飯おかわり無料'
+};
+
+let currentLang = 'ko';
+
+function renderLangbar(){
+  const bar = document.getElementById('langbar');
+  bar.innerHTML = '';
+  LANGS.forEach(l=>{
+    const btn = document.createElement('button');
+    btn.className = 'langtab' + (l.code===currentLang ? ' active':'');
+    btn.textContent = l.label;
+    btn.onclick = ()=>{ currentLang = l.code; render(); };
+    bar.appendChild(btn);
+  });
+}
+
+function t(field, lang){
+  if(!field) return '';
+  return field[lang] || field.ko || '';
+}
+
+function render(){
+  renderLangbar();
+
+  const u = UI[currentLang];
+  document.getElementById('restName').textContent = u.name;
+  document.getElementById('restSub').textContent = u.sub;
+  document.getElementById('restTagline').textContent = u.tag;
+
+  const root = document.getElementById('menuRoot');
+  root.innerHTML = '';
+
+  DATA.forEach(section=>{
+    const sec = document.createElement('div');
+    sec.className = 'section';
+
+    const h = document.createElement('div');
+    h.className = 'section-title';
+    h.textContent = t(section.title, currentLang);
+    sec.appendChild(h);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    section.items.forEach(item=>{
+      const row = document.createElement('div');
+      row.className = 'item';
+
+      const left = document.createElement('div');
+      const nm = document.createElement('div');
+      nm.className = 'item-name';
+      nm.textContent = t(item.name, currentLang);
+      if(item.suffix){
+        const sf = document.createElement('span');
+        sf.className = 'item-suffix';
+        sf.textContent = t(item.suffix, currentLang);
+        nm.appendChild(sf);
+      }
+      left.appendChild(nm);
+      if(item.note){
+        const nt = document.createElement('span');
+        nt.className = 'item-note';
+        nt.textContent = t(item.note, currentLang);
+        left.appendChild(nt);
+      }
+
+      const right = document.createElement('div');
+      right.className = 'item-price';
+      if(item.was){
+        const was = document.createElement('span');
+        was.className = 'was';
+        was.textContent = currentLang==='ko' ? item.was : (item.wasT ? item.wasT[currentLang] : item.was);
+        right.appendChild(was);
+      }
+      const pr = document.createElement('span');
+      pr.textContent = currentLang==='ko' ? item.price : (item.priceT ? item.priceT[currentLang] : item.price);
+      right.appendChild(pr);
+
+      row.appendChild(left);
+      row.appendChild(right);
+      card.appendChild(row);
+    });
+
+    sec.appendChild(card);
+
+    if(section.banner){
+      const b = document.createElement('div');
+      b.className = 'banner';
+      b.style.margin = '0 0 16px';
+      b.textContent = t(section.banner, currentLang);
+      sec.appendChild(b);
+    }
+
+    root.appendChild(sec);
+  });
+
+  const notice = document.createElement('div');
+  notice.className = 'banner';
+  notice.textContent = t(NOTICE, currentLang);
+  root.appendChild(notice);
+
+  const foot = document.createElement('div');
+  foot.className = 'footnote';
+  foot.textContent = t(FOOT, currentLang);
+  root.appendChild(foot);
+}
+
+render();
+</script>
+</body>
+</html>
